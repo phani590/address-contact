@@ -2,13 +2,17 @@ package com.crm.purple.army.skill.assessment.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.crm.purple.army.skill.assessment.entity.Contact;
@@ -19,9 +23,18 @@ public class ContactController {
 	@Autowired
     private ContactService service;
 	
+	
 	@RequestMapping("/listContacts")
 	public ModelAndView viewHomePage(Model model) {
 	    List<Contact> listContacts = service.listAll();
+	    ModelAndView mav = new ModelAndView("contact_list");
+	    mav.addObject("listContacts", listContacts);
+	     
+	    return mav;
+	}
+	@RequestMapping(value="/searchContacts",method = RequestMethod.POST)
+	public ModelAndView viewSearchPage(@RequestParam String searchText) {
+	    List<Contact> listContacts = service.searchContact(searchText);
 	    ModelAndView mav = new ModelAndView("contact_list");
 	    mav.addObject("listContacts", listContacts);
 	     
@@ -36,10 +49,14 @@ public class ContactController {
 	}
 	
 	@RequestMapping(value = "/saveContact", method = RequestMethod.POST)
-	public ModelAndView saveContact(@ModelAttribute("contact") Contact contact) {
+	public String saveContact(@Valid @ModelAttribute("contact") Contact contact,BindingResult bindingResult,Model model) {
+		if (bindingResult.hasErrors()) {
+			    return "contact";
+	      }
+		
 	    service.save(contact);
 	     
-	    return new ModelAndView("redirect:/listContacts");
+	    return "redirect:/listContacts";
 	}
 	
 	@RequestMapping("/editContact/{id}")

@@ -9,7 +9,7 @@ public class LoginController {
 	 // Login form  
     @RequestMapping("/login.html")  
     public String login() {  
-        return "login.html";  
+        return "contact_list.html";  
     }  
     // Login form with error  
     @RequestMapping("/login-error.html")  

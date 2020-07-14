@@ -3,11 +3,49 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8"/>
-<title>Product Manager</title>
+<title>Contact Manager</title>
 </head>
 <body>
 <div align="center">
-   <a href="newContact">Create New Product</a>
+    <h1>Contact List</h1>
+    <a href="newContact">Create New Contact</a>
+    <br/><br/>
+    <form action="searchContacts" 
+			method="post">
+			<table cellpadding="10">
+				<tr>				
+					<td>
+						<input type="text" name="searchText" />
+					</td>
+					<td colspan=""><button type="submit">Search</button> </td>
+				</tr>
+			</table>
+			</form>
+    <table border="1" cellpadding="10">
+        <thead>
+            <tr>
+                <th>Contact ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>PhoneNumber</th>
+               
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="contact : ${listContacts}">
+            	<td th:text="${contact.id}">Contact ID</td>
+                <td th:text="${contact.name}">Name</td>
+                <td th:text="${contact.email}">Email</td>
+                <td th:text="${contact.phoneNumber}">PhoneNumber</td>
+                <td>
+                	<a th:href="@{'/editContact/' + ${contact.id}}">Edit</a>
+                	&nbsp;&nbsp;&nbsp;
+                	<a th:href="@{'/deleteContact/' + ${contact.id}}">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>    
 </body>
 </html>

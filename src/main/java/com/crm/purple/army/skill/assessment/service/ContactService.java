@@ -18,6 +18,10 @@ public class ContactService {
     public List<Contact> listAll() {
         return repo.findAll();
     }
+    
+    public List<Contact> searchContact(String searchText) {
+        return repo.findByNameContaining(searchText);
+    }
      
     public void save(Contact product) {
         repo.save(product);
